@@ -1,0 +1,12 @@
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/raw/manual/
+!data/raw/manual/.gitkeep
+data/raw/manual/*
+!data/processed/.gitkeep
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+*.log
