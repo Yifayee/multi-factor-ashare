@@ -76,3 +76,13 @@ LGBM_PARAMS = dict(          # conservative defaults, not tuned on results
     subsample=0.8, subsample_freq=1, colsample_bytree=0.8, reg_lambda=1.0,
     random_state=42, verbose=-1,
 )
+
+# ---------------- Phase 5: portfolio backtest (assumptions fixed before running) ----------------
+BT_SIGNALS = ["ew_all", "lgbm"]  # main strategy: equal weight of all 10 factors; lgbm for comparison
+TOP_FRACTION = 0.2               # hold the top 20% of stocks by score, equal weight
+COMMISSION = 0.00025             # per side
+SLIPPAGE = 0.001                 # per side, rough allowance for spread and market impact
+STAMP_DUTY_OLD = 0.001           # sell side only
+STAMP_DUTY_NEW = 0.0005          # halved from 2023-08-28
+STAMP_CHANGE_DATE = "2023-08-28"
+LIMIT_TOL = 0.003                # a close within 0.3 pp of the price limit counts as limit-up/down
