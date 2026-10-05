@@ -127,3 +127,12 @@ def metrics(r: pd.Series, bench: pd.Series = None) -> dict:
         out["info_ratio"] = a.mean() / a.std() * np.sqrt(12)
         out["win_rate"] = (a > 0).mean()
     return out
+
+
+def yearly_by_start(series: dict, exec_d: list) -> pd.DataFrame:
+    """Compound period returns into years by each period's START date, so a year means
+    periods that begin in that year (e.g. 2 Jan to 2 Jan of the next year)."""
+    start_of = dict(zip(pd.DatetimeIndex(exec_d[1:]), pd.DatetimeIndex(exec_d[:-1])))
+    df = pd.DataFrame(series)
+    years = [start_of[d].year for d in df.index]
+    return df.groupby(years).apply(lambda x: (1 + x).prod() - 1)

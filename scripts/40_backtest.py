@@ -12,7 +12,7 @@ import pandas as pd  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from config import BT_SIGNALS, DATA_PROCESSED, DATA_RAW, REPORTS, TOP_FRACTION  # noqa: E402
 from src.backtest.engine import (ew_universe, execution_dates, index_returns,  # noqa: E402
-                                 load_exec_data, metrics, run_backtest)
+                                 load_exec_data, metrics, run_backtest, yearly_by_start)
 from src.data.utils import to_ns  # noqa: E402
 
 pd.set_option("display.width", 200)
@@ -62,8 +62,8 @@ print("\n== Backtest (in %, monthly data; excess_ann, info_ratio and win_rate ar
       "Sharpe uses a zero risk-free rate) ==")
 print(show.to_string())
 
-yearly = pd.DataFrame(series).groupby(lambda d: d.year).apply(lambda x: (1 + x).prod() - 1)
-print("\n== Calendar-year returns (%) ==")
+yearly = yearly_by_start(series, exec_d)
+print("\n== Returns by year of period start (%; first and last years are partial) ==")
 print((yearly * 100).round(2).to_string())
 yearly.to_csv(REPORTS / "phase5_yearly.csv")
 
