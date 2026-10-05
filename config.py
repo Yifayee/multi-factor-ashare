@@ -57,3 +57,22 @@ FACTOR_PRIORS = {
     "vol_60d": -1,    # 60-day volatility, low-volatility anomaly
     "turn_20d": -1,   # 20-day average turnover
 }
+
+# ---------------- Phase 3: single-factor tests (criteria fixed before running) ----------------
+N_QUANTILES = 5
+# A factor "passes" if, over BACKTEST_START to HOLDOUT_START, all of these hold:
+PASS_MIN_RANK_IC = 0.02   # mean monthly Rank IC in the prior direction
+PASS_MIN_T = 2.0          # t-stat of mean Rank IC
+PASS_LS_POSITIVE = True   # Q5 - Q1 annualised return > 0
+
+# ---------------- Phase 4: factor combination (fixed before running) ----------------
+PASSED_FACTORS = ["bp", "ep", "accruals", "rev_1m", "vol_60d", "turn_20d"]  # from Phase 3
+TRAIN_START = "2015-01-01"   # earliest training month (momentum needs 2014 for history)
+PRED_START = "2018-01-01"    # first prediction month: at least 3 years of training data
+RETRAIN_EVERY = 12           # months between refits (expanding window)
+VALID_MONTHS = 12            # last months of each training window used for early stopping
+LGBM_PARAMS = dict(          # conservative defaults, not tuned on results
+    n_estimators=500, learning_rate=0.03, num_leaves=31, min_child_samples=1000,
+    subsample=0.8, subsample_freq=1, colsample_bytree=0.8, reg_lambda=1.0,
+    random_state=42, verbose=-1,
+)
